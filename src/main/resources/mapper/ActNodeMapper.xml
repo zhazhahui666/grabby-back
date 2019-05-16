@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzh.grabby.activiti.mapper.ActNodeMapper">
+
+    <!-- 通用查询结果列 -->
+
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        process_define_id, act_id,act_name,handler_name, hander_type
+    </sql>
+
+</mapper>

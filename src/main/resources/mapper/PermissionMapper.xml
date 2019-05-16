@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzh.grabby.mapper.PermissionMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        update_time,
+        update_user,
+        name, title, pid, component, type, sort_order, path, url, icon, level
+    </sql>
+
+    <select id="findByUid" resultType="com.zzh.grabby.entity.Permission">
+      SELECT DISTINCT p.id, p.name, p.title, p.pid, p.component, p.type, p.sort_order, p.path, p.url, p.icon,p.level
+      FROM t_user u
+      LEFT JOIN t_user_role ur ON u.id = ur.uid
+      LEFT JOIN t_role_permission rp ON ur.role_id = rp.role_id
+      LEFT JOIN t_permission p ON p.id = rp.permission_id
+      WHERE u.id = #{uid} and p.id is not null
+      ORDER BY p.sort_order ASC
+    </select>
+
+    <select id="selectByRole" resultType="com.zzh.grabby.entity.Permission">
+        SELECT p.id,p.name,p.title,p.type,p.path FROM t_role_permission rp
+        LEFT JOIN  t_permission p on p.id = rp.permission_id
+        WHERE rp.role_id = #{roleId} order by p.create_time desc
+    </select>
+
+    <select id="getByGroup" resultType="com.zzh.grabby.entity.Permission">
+        SELECT p.*,pg.name as groupName FROM t_permission p
+        LEFT JOIN t_permission_group pg on p.group_id = pg.id
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzh.grabby.mapper.UserMapper">
+
+    <select id="selectPageByRole" resultType="com.zzh.grabby.entity.UserVo">
+        SELECT u.id,u.username,u.realname,u.mobile,u.email,d.name as departmentName FROM t_user_role ur
+        LEFT JOIN t_user u  on u.id = ur.uid
+        left join t_department d on u.department_id = d.id
+        WHERE ur.role_id = #{roleId}
+    </select>
+    <select id="selectByRole" resultType="com.zzh.grabby.entity.User">
+        SELECT u.id,u.username,u.mobile,u.email FROM t_user_role ur
+        LEFT JOIN t_user u
+        on u.id = ur.uid
+        WHERE ur.role_id = #{roleId} order by u.create_time desc
+    </select>
+
+
+    <select id="selectUserPage" resultType="com.zzh.grabby.entity.UserVo">
+       select
+        u.id,u.username,u.nickname,u.realname,u.email,u.mobile,u.address,u.status,d.name as departmentName,
+        u.sex,u.avatar,u.department_id as departmentId,u.type,u.status
+        from  t_user u
+       left join t_department d on u.department_id = d.id
+       <where>
+           <if test="user.username != null and user.username != ''">
+                u.username like CONCAT('%',#{user.username},'%')
+           </if>
+           <if test="user.mobile != null and user.mobile != ''">
+               and u.mobile like CONCAT('%',#{user.mobile},'%')
+           </if>
+           <if test="user.departmentId != null">
+               and u.department_id = #{user.departmentId}
+           </if>
+       </where>
+        order by u.update_time desc
+
+
+    </select>
+</mapper>

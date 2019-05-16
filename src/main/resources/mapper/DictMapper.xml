@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzh.grabby.mapper.DictMapper">
+
+    <!-- 通用查询结果列 -->
+    <resultMap id="BaseResultMap" type="com.zzh.grabby.entity.Dict">
+        <result column="name" property="name"/>
+        <result column="dict_code" property="dictCode"/>
+        <result column="rank" property="rank"/>
+        <result column="description" property="description"/>
+        <result column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        name, dict_code, rank
+    </sql>
+
+
+    <select id="getOptionByCode" resultType="com.zzh.grabby.entity.DictOption">
+        SELECT dp.*,d.name as dictName FROM t_dict d
+        LEFT JOIN t_dict_option dp on d.id = dp.dict_id
+
+        <where>
+            dp.id is not null
+            <if test="code != null and code != ''">
+              and  d.dict_code = #{code}
+            </if>
+        </where>
+        order by d.id desc,dp.rank
+    </select>
+
+
+
+
+</mapper>

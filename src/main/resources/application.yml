@@ -1,0 +1,92 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 2000
+    min-spare-threads: 1000
+
+spring:
+  # 数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/grabby?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: chenliang110.
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    logSlowSql: true
+
+    druid:
+      max-active: 1000
+      initial-size: 100
+      max-wait: 6000
+      min-idle: 500  #最大空闲
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      max-open-prepared-statements: 20
+      pool-prepared-statements: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  # 工作流
+  activiti:
+    check-process-definitions: false #自动检查、部署流程定义文件
+    db-identity-used: false
+    # 自动生成Activiti相关表 第一次生成后建议关闭提高运行速度
+    database-schema-update: false
+    history-level: full
+    #关闭定时任务，等待后续功能完善
+    async-executor-activate: false
+
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+
+  #实体扫描，多个package用逗号或者分号分隔
+  #  typeAliasesPackage: com.zzh.grabby.entity
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: IGNORED
+      #驼峰下划线转换
+      column-underline: true
+      #数据库大写下划线转换
+      #capital-mode: true
+      #逻辑删除配置
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      db-type: h2
+    #刷新mapper 调试神器
+    refresh: true
+  configuration:
+    #日志输出控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+grabby:
+  file-storage:
+    qiniu:
+      bucket: grabby
+      access-key: n1y9_Ao5UptCVnJbaFPjEQVleep8RFF5rQTtcZiw
+      secret-key: QzAJjmM9uelI8SNg7F9jogYMzfT5ZhhNfFLVjclH
+      domain-prefix: http://
+      domain: pl2ak28x0.bkt.clouddn.com
+
+  ignored:
+    urls:
+      - /editor-app/**
+      - /grabby/not_login
+      - /index.html
+      - /activiti-explorer/service/editor/*
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /webjars/**
+      - /ueditor/**
+
